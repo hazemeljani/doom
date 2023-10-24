@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shopping Cart</title>
+  <style>
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+    .heart {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+    
+  <h1>Shopping Cart</h1>
+  <div id="cart">
+    <!-- Sample cart items -->
+    <div class="cart-item">
+      <span>Item 1</span>
+      <button class="quantity-button" data-action="decrease">-</button>
+      <span class="quantity">1</span>
+      <button class="quantity-button" data-action="increase">+</button>
+      <button class="delete-button">Delete</button>
+      <span class="heart">❤️</span>
+      <span class="price">$10</span>
+    </div>
+    <div class="cart-item">
+      <span>Item 2</span>
+      <button class="quantity-button" data-action="decrease">-</button>
+      <span class="quantity">2</span>
+      <button class="quantity-button" data-action="increase">+</button>
+      <button class="delete-button">Delete</button>
+      <span class="heart">❤️</span>
+      <span class="price">$15</span>
+    </div>
+  </div>
+  <p>Total Price: <span id="total-price">$40</span></p>
+
+  <script>
+    const quantityButtons = document.querySelectorAll('.quantity-button');
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    const likeButtons = document.querySelectorAll('.heart');
+    const totalPriceElement = document.getElementById('total-price');
+
+    let totalPrice = 40; // Initial total price
+
+    quantityButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        const quantityElement = item.querySelector('.quantity');
+        const priceElement = item.querySelector('.price');
+        const price = parseInt(priceElement.textContent.slice(1));
+
+        if (button.getAttribute('data-action') === 'decrease' && quantityElement.textContent > 1) {
+          quantityElement.textContent = parseInt(quantityElement.textContent) - 1;
+          totalPrice -= price;
+        } else if (button.getAttribute('data-action') === 'increase') {
+          quantityElement.textContent = parseInt(quantityElement.textContent) + 1;
+          totalPrice += price;
+        }
+
+        totalPriceElement.textContent = `$${totalPrice}`;
+      });
+    });
+
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        const priceElement = item.querySelector('.price');
+        const price = parseInt(priceElement.textContent.slice(1));
+        const quantityElement = item.querySelector('.quantity');
+        const quantity = parseInt(quantityElement.textContent);
+        totalPrice -= price * quantity;
+        item.remove();
+        totalPriceElement.textContent = `$${totalPrice}`;
+      });
+    });
+
+    likeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        button.classList.toggle('liked');
+      });
+    });
+  </script>
+</body>
+</html>
